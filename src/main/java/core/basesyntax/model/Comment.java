@@ -1,15 +1,21 @@
 package core.basesyntax.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
+@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(name = "comments_smiles",
+    joinColumns = @JoinColumn(name = "comment_id"),
+    inverseJoinColumns = @JoinColumn(name = "smile_id"))
     private List<Smile> smiles;
 
     public Long getId() {
