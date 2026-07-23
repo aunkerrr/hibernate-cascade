@@ -28,7 +28,7 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't delete"
+            throw new DataProcessingException("Can't create "
                     + "comment: " + entity, e);
         } finally {
             if (session != null) {
@@ -49,8 +49,13 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
     @Override
     public List<Comment> getAll() {
         try (Session session = factory.openSession()) {
-            return session.createQuery("SELECT comments"
-                    + "FROM comment")
+            return session.createQuery("SELECT c "
+                    + "FROM Сomment LEFT "
+                            + "JOIN FETCH c.smiles", Comment.class)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get list "
+                    + "of all comments", e);
         }
     }
 
