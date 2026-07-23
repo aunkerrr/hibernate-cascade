@@ -39,7 +39,7 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
 
     @Override
     public Comment get(Long id) {
-        try (Session session = factory.openSession()){
+        try (Session session = factory.openSession()) {
             return session.get(Comment.class, id);
         } catch (Exception e) {
             throw new DataProcessingException("Can't get Comment by id" + id, e);
@@ -50,7 +50,7 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
     public List<Comment> getAll() {
         try (Session session = factory.openSession()) {
             return session.createQuery("SELECT c "
-                    + "FROM Сomment LEFT "
+                    + "FROM Comment c LEFT "
                             + "JOIN FETCH c.smiles", Comment.class)
                     .getResultList();
         } catch (Exception e) {
@@ -61,24 +61,24 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
 
     @Override
     public void remove(Comment entity) {
-            Session session = null;
-            Transaction transaction = null;
+        Session session = null;
+        Transaction transaction = null;
 
-            try {
-                session = factory.openSession();
-                transaction = session.beginTransaction();
-                session.remove(entity);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-                throw new DataProcessingException("Can't delete"
-                        + "comment: " + entity, e);
-            } finally {
-                if (session != null) {
-                    session.close();
-                }
+        try {
+            session = factory.openSession();
+            transaction = session.beginTransaction();
+            session.remove(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DataProcessingException("Can't delete"
+                    + "comment: " + entity, e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 }
